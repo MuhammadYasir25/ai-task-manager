@@ -24,7 +24,7 @@ const seedSuperAdmin = async () => {
                 role: 'admin',
                 isVerified: true
             });
-            console.log('??? Super Admin initialized securely from environment configuration.');
+            console.log('Super Admin initialized securely from environment configuration.');
         } else {
             existingAdmin.role = 'admin';
             existingAdmin.password = hashedPassword;
@@ -39,10 +39,10 @@ const seedSuperAdmin = async () => {
 const connectDB = async () => {
     try {
         const conn = await mongoose.connect(process.env.MONGO_URI);
-        console.log(?? MongoDB Connected: );
+        console.log('MongoDB Connected: ' + conn.connection.host);
         await seedSuperAdmin();
     } catch (error) {
-        console.error(? MongoDB Connection Error: );
+        console.error('MongoDB Connection Error: ' + error.message);
     }
 };
 
