@@ -11,12 +11,11 @@ const seedSuperAdmin = async () => {
             return;
         }
 
-        const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash(adminPassword, salt);
-
         const existingAdmin = await User.findOne({ email: adminEmail });
 
         if (!existingAdmin) {
+            const salt = await bcrypt.genSalt(10);
+            const hashedPassword = await bcrypt.hash(adminPassword, salt);
             await User.create({
                 name: process.env.ADMIN_NAME || 'Super Admin',
                 email: adminEmail,
@@ -26,10 +25,12 @@ const seedSuperAdmin = async () => {
             });
             console.log('Super Admin initialized securely from environment configuration.');
         } else {
-            existingAdmin.role = 'admin';
-            existingAdmin.password = hashedPassword;
-            existingAdmin.isVerified = true;
-            await existingAdmin.save();
+            // NEVER overwrite user's password if account already exists!
+            if (existingAdmin.role !== 'admin' || !existingAdmin.isVerified) {
+                existingAdmin.role = 'admin';
+                existingAdmin.isVerified = true;
+                await existingAdmin.save();
+            }
         }
     } catch (err) {
         console.error('Error auto-seeding admin:', err.message);

@@ -4,7 +4,8 @@ import dotenv from 'dotenv';
 import connectDB from './config/db.js';
 import authRoutes from './routes/authroutes.js';
 import taskRoutes from './routes/taskroutes.js';
-import adminRoutes from './routes/adminroutes.js'; // <-- Import here
+import adminRoutes from './routes/adminroutes.js';
+import chatRoutes from './routes/chatRoutes.js'; // <-- Import here
 
 dotenv.config();
 
@@ -19,7 +20,10 @@ app.use(express.json());
 // API Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/tasks', taskRoutes);
-app.use('/api/admin', adminRoutes); // <-- Mount here
+app.use('/api/admin', adminRoutes);
+app.use('/api/chat', chatRoutes);
+app.use('/chat', chatRoutes);
+app.use('/api/api/chat', chatRoutes); // <-- Mount here
 
 app.get('/api/health', (req, res) => {
     res.json({
