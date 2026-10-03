@@ -9,7 +9,7 @@ const generateToken = (id) => {
     });
 };
 
-const strongPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#^_\-])[A-Za-z\d@$!%*?&#^_\-]{8,}$/;
+const strongPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$a!%*?&#^_\-])[A-Za-z\d@$a!%*?&#^_\-]{8,}$/;
 
 const generateOTP = () => {
     return Math.floor(100000 + Math.random() * 900000).toString();
@@ -27,7 +27,7 @@ export const registerUser = async (req, res) => {
 
         if (!strongPasswordRegex.test(password)) {
             return res.status(400).json({
-                message: 'Password must be at least 8 characters long and include an uppercase letter, a lowercase letter, a number, and a special character (@$!%*?&#^_).'
+                message: 'Password must be at least 8 characters long and include an uppercase letter, a lowercase letter, a number, and a special character (@$a!%*?&#^_).'
             });
         }
 
@@ -39,7 +39,6 @@ export const registerUser = async (req, res) => {
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
 
-        // 60 SECONDS VALIDITY
         const otp = generateOTP();
         const otpExpires = new Date(Date.now() + 60 * 1000);
 
@@ -65,8 +64,7 @@ export const registerUser = async (req, res) => {
     }
 };
 
-// @desc    Verify 6-Digit OTP
-// @route   POST /api/auth/verify-otp
+
 export const verifyOTP = async (req, res) => {
     try {
         const { email, otp } = req.body;
@@ -80,7 +78,6 @@ export const verifyOTP = async (req, res) => {
             return res.status(404).json({ message: 'User not found' });
         }
 
-        // 60-Second Check
         if (user.otpExpires && user.otpExpires < new Date()) {
             return res.status(400).json({ message: 'Verification code expired (60s limit). Please request a new code.' });
         }
@@ -108,8 +105,7 @@ export const verifyOTP = async (req, res) => {
     }
 };
 
-// @desc    Resend OTP (60 Seconds)
-// @route   POST /api/auth/resend-otp
+
 export const resendOTP = async (req, res) => {
     try {
         const { email } = req.body;
@@ -121,18 +117,17 @@ export const resendOTP = async (req, res) => {
 
         const otp = generateOTP();
         user.otp = otp;
-        user.otpExpires = new Date(Date.now() + 60 * 1000); // 60 seconds
+        user.otpExpires = new Date(Date.now() + 60 * 1000);
         await user.save();
 
-        await sendOTPEmail(email, otp);
+        await sendOSPEmail(email, otp);
         res.json({ message: 'New verification code sent! Valid for 60 seconds.' });
     } catch (error) {
         res.status(500).json({ message: 'Error resending OTP' });
     }
 };
 
-// @desc    Authenticate user & get token
-// @route   POST /api/auth/login
+
 export const loginUser = async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -154,7 +149,7 @@ export const loginUser = async (req, res) => {
         if (!user.isVerified) {
             const otp = generateOTP();
             user.otp = otp;
-            user.otpExpires = new Date(Date.now() + 60 * 1000); // 60 seconds
+            user.otpExpires = new Date(Date.now() + 60 * 1000);
             await user.save();
             await sendOTPEmail(email, otp);
 
@@ -175,6 +170,119 @@ export const loginUser = async (req, res) => {
     } catch (error) {
         console.error('Login error:', error);
         res.status(500).json({ message: 'Server error during login' });
+    }
+};
+
+
+// @desc    Forgot Password - Send OTP for reset
+// @route   POST /api/auth/forgot-password
+export const forgotPassword = async (req, res) => {
+    try {
+        const { email } = req.body;
+
+        if (!email) {
+            return res.status(400).json({ message: 'Please provide your registered email address' });
+        }
+
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(404).json({ message: 'No account found with this email address' });
+        }
+
+        const otp = generateOTP();
+        user.otp = otp;
+        user.otpExpires = new Date(Date.now() + 60 * 1000); // 60 Seconds
+        await user.save();
+
+        await sendOTPEmail(email, otp);
+
+        res.json({
+            email: user.email,
+            message: 'Password reset code sent to your email (valid for 60 seconds).'
+        });
+    } catch (error) {
+        console.error('Forgot password error:', error);
+        res.status(500).json({ message: 'Failed to process forgot password request' });
+    }
+};
+
+// @desc    Reset Password using OTP
+// @route   POST /api/auth/reset-password
+export const resetPassword = async (req, res) => {
+    try {
+        const { email, otp, newPassword } = req.body;
+
+        if (!email || !otp || !newPassword) {
+            return res.status(400).json({ message: 'Please provide email, OTP code, and your new password' });
+        }
+
+        if (!strongPasswordRegex.test(newPassword)) {
+            return res.status(400).json({
+                message: 'New password must be at least 8 characters long and include uppercase, lowercase, a number, and a special character'
+            });
+        }
+
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        if (user.otpExpires && user.otpExpires < new Date()) {
+            return res.status(400).json({ message: 'OTP code has expired. Please request a new one.' });
+        }
+
+        if (user.otp !== otp) {
+            return res.status(400).json({ message: 'Invalid verification code' });
+        }
+
+        const salt = await bcrypt.genSalt(10);
+        user.password = await bcrypt.hash(newPassword, salt);
+        user.otp = undefined;
+        user.otpExpires = undefined;
+        user.isVerified = true;
+        await user.save();
+
+        res.json({ message: 'Password has been reset successfully! You can now log in with your new password.' });
+    } catch (error) {
+        console.error('Reset password error:', error);
+        res.status(500).json({ message: 'Failed to reset password' });
+    }
+};
+
+// @desc    Change Password (Logged In)
+// @route   PUT /api/auth/change-password
+export const changePassword = async (req, res) => {
+    try {
+        const { currentPassword, newPassword } = req.body;
+
+        if (!currentPassword || !newPassword) {
+            return res.status(400).json({ message: 'Please provide both current and new passwords' });
+        }
+
+        const user = await User.findById(req.user._id);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        const isMatch = await bcrypt.compare(currentPassword, user.password);
+        if (!isMatch) {
+            return res.status(400).json({ message: 'Incorrect current password' });
+        }
+
+        if (!strongPasswordRegex.test(newPassword)) {
+            return res.status(400).json({
+                message: 'New password must be at least 8 characters long and include uppercase, lowercase, a number, and a special character'
+            });
+        }
+
+        const salt = await bcrypt.genSalt(10);
+        user.password = await bcrypt.hash(newPassword, salt);
+        await user.save();
+
+        res.json({ message: 'Password updated successfully!' });
+    } catch (error) {
+        console.error('Change password error:', error);
+        res.status(500).json({ message: 'Server error updating password' });
     }
 };
 
