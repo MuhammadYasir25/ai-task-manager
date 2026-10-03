@@ -105,7 +105,7 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col selection:bg-indigo-500 selection:text-white">
+    <div className="min-h-screen bg-slate-50 text-slate-800 flex flex-col selection:bg-indigo-500 selection:text-white">
       <Navbar
         user={user}
         onLogout={handleLogout}
@@ -122,43 +122,43 @@ export default function App() {
           <>
             {/* Statistics Bar */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-              <div className="bg-slate-900 border border-slate-800/80 rounded-2xl p-4 flex items-center space-x-3 shadow-md">
-                <div className="p-3 bg-indigo-500/10 text-indigo-400 rounded-xl">
+              <div className="bg-white border border-slate-200/90 rounded-2xl p-4.5 flex items-center space-x-3.5 shadow-xs hover:shadow-md transition-all duration-200">
+                <div className="p-3 bg-indigo-50 text-indigo-600 rounded-xl">
                   <Layers className="w-5 h-5" />
                 </div>
                 <div>
-                  <p className="text-xs text-slate-400 font-medium">Total Tasks</p>
-                  <h4 className="text-xl font-bold text-white">{stats.total}</h4>
+                  <p className="text-xs text-slate-500 font-medium">Total Tasks</p>
+                  <h4 className="text-xl font-bold text-slate-900">{stats.total}</h4>
                 </div>
               </div>
 
-              <div className="bg-slate-900 border border-slate-800/80 rounded-2xl p-4 flex items-center space-x-3 shadow-md">
-                <div className="p-3 bg-blue-500/10 text-blue-400 rounded-xl">
+              <div className="bg-white border border-slate-200/90 rounded-2xl p-4.5 flex items-center space-x-3.5 shadow-xs hover:shadow-md transition-all duration-200">
+                <div className="p-3 bg-blue-50 text-blue-600 rounded-xl">
                   <Clock className="w-5 h-5" />
                 </div>
                 <div>
-                  <p className="text-xs text-slate-400 font-medium">In Progress</p>
-                  <h4 className="text-xl font-bold text-white">{stats.inProgress}</h4>
+                  <p className="text-xs text-slate-500 font-medium">In Progress</p>
+                  <h4 className="text-xl font-bold text-slate-900">{stats.inProgress}</h4>
                 </div>
               </div>
 
-              <div className="bg-slate-900 border border-slate-800/80 rounded-2xl p-4 flex items-center space-x-3 shadow-md">
-                <div className="p-3 bg-emerald-500/10 text-emerald-400 rounded-xl">
+              <div className="bg-white border border-slate-200/90 rounded-2xl p-4.5 flex items-center space-x-3.5 shadow-xs hover:shadow-md transition-all duration-200">
+                <div className="p-3 bg-emerald-50 text-emerald-600 rounded-xl">
                   <CheckCircle className="w-5 h-5" />
                 </div>
                 <div>
-                  <p className="text-xs text-slate-400 font-medium">Completed</p>
-                  <h4 className="text-xl font-bold text-white">{stats.completed}</h4>
+                  <p className="text-xs text-slate-500 font-medium">Completed</p>
+                  <h4 className="text-xl font-bold text-slate-900">{stats.completed}</h4>
                 </div>
               </div>
 
-              <div className="bg-slate-900 border border-slate-800/80 rounded-2xl p-4 flex items-center space-x-3 shadow-md">
-                <div className="p-3 bg-rose-500/10 text-rose-400 rounded-xl">
+              <div className="bg-white border border-slate-200/90 rounded-2xl p-4.5 flex items-center space-x-3.5 shadow-xs hover:shadow-md transition-all duration-200">
+                <div className="p-3 bg-rose-50 text-rose-600 rounded-xl">
                   <AlertTriangle className="w-5 h-5" />
                 </div>
                 <div>
-                  <p className="text-xs text-slate-400 font-medium">High / Urgent</p>
-                  <h4 className="text-xl font-bold text-white">{stats.urgent}</h4>
+                  <p className="text-xs text-slate-500 font-medium">High / Urgent</p>
+                  <h4 className="text-xl font-bold text-slate-900">{stats.urgent}</h4>
                 </div>
               </div>
             </div>
@@ -166,25 +166,25 @@ export default function App() {
             {/* Filter & Search Bar */}
             <div className="flex flex-col md:flex-row gap-4 justify-between items-center mb-6">
               <div className="relative w-full md:w-80">
-                <Search className="w-4 h-4 text-slate-500 absolute left-3.5 top-3" />
+                <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
                 <input
                   type="text"
                   placeholder="Search tasks..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full bg-slate-900 border border-slate-800 rounded-xl py-2 pl-10 pr-4 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition"
+                  className="w-full bg-white border border-slate-200 rounded-xl py-2 pl-10 pr-4 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 shadow-2xs transition"
                 />
               </div>
 
               <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">
-                <div className="flex p-1 bg-slate-900 border border-slate-800 rounded-xl">
+                <div className="flex p-1 bg-slate-200/70 border border-slate-200 rounded-xl">
                   {['all', 'pending', 'in-progress', 'completed'].map((tab) => (
                     <button
                       key={tab}
                       onClick={() => setStatusFilter(tab)}
                       className={`px-3 py-1.5 text-xs font-medium rounded-lg capitalize transition ${statusFilter === tab
-                          ? 'bg-indigo-600 text-white shadow'
-                          : 'text-slate-400 hover:text-white'
+                          ? 'bg-white text-indigo-700 shadow-xs font-semibold'
+                          : 'text-slate-600 hover:text-slate-900'
                         }`}
                     >
                       {tab === 'in-progress' ? 'In Progress' : tab}
@@ -195,7 +195,7 @@ export default function App() {
                 <select
                   value={priorityFilter}
                   onChange={(e) => setPriorityFilter(e.target.value)}
-                  className="bg-slate-900 border border-slate-800 text-slate-300 text-xs rounded-xl px-3 py-2 focus:outline-none focus:border-indigo-500 cursor-pointer"
+                  className="bg-white border border-slate-200 text-slate-700 text-xs rounded-xl px-3 py-2 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 shadow-2xs cursor-pointer"
                 >
                   <option value="all">All Priorities</option>
                   <option value="Low">Low Priority</option>
@@ -224,12 +224,12 @@ export default function App() {
                 ))}
               </div>
             ) : (
-              <div className="text-center py-20 bg-slate-900/40 border border-dashed border-slate-800 rounded-2xl p-8">
+              <div className="text-center py-20 bg-white border-2 border-dashed border-slate-200 rounded-3xl p-8 shadow-xs">
                 <div className="inline-flex p-3 bg-indigo-600/10 text-indigo-400 rounded-xl mb-3">
                   <Sparkles className="w-6 h-6" />
                 </div>
-                <h3 className="text-base font-semibold text-white mb-1">No tasks found</h3>
-                <p className="text-xs text-slate-400 max-w-sm mx-auto mb-5">
+                <h3 className="text-base font-semibold text-slate-900 mb-1">No tasks found</h3>
+                <p className="text-xs text-slate-500 max-w-sm mx-auto mb-5">
                   Create your first task and let Claude AI automatically break it down into actionable steps!
                 </p>
                 <button

@@ -108,32 +108,32 @@ export default function Auth({ onLoginSuccess }) {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center p-4 bg-slate-950">
-            <div className="w-full max-w-md bg-slate-900 border border-slate-800 rounded-2xl p-8 shadow-2xl">
+        <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-slate-50 via-indigo-50/30 to-slate-100">
+            <div className="w-full max-w-md bg-white border border-slate-200/90 rounded-3xl p-8 shadow-xl shadow-slate-200/60">
 
                 {/* Logo */}
                 <div className="flex items-center justify-center space-x-2 mb-6">
                     <div className="p-2.5 bg-indigo-600/20 border border-indigo-500/30 rounded-xl text-indigo-400">
                         <Sparkles className="w-6 h-6" />
                     </div>
-                    <h1 className="text-2xl font-bold text-white tracking-tight">AI Task Manager</h1>
+                    <h1 className="text-2xl font-bold text-slate-900 tracking-tight">AI Task Manager</h1>
                 </div>
 
                 {/* SCREEN 1: OTP Verification Screen with 60s Countdown */}
                 {awaitingVerification ? (
                     <div>
                         <div className="text-center mb-5">
-                            <div className="w-12 h-12 bg-indigo-500/10 border border-indigo-500/30 rounded-2xl flex items-center justify-center mx-auto text-indigo-400 mb-3">
+                            <div className="w-12 h-12 bg-indigo-50 border border-indigo-200 rounded-2xl flex items-center justify-center mx-auto text-indigo-600 mb-3">
                                 <KeyRound className="w-6 h-6" />
                             </div>
-                            <h2 className="text-lg font-bold text-white">Enter Verification Code</h2>
+                            <h2 className="text-lg font-bold text-slate-900">Enter Verification Code</h2>
                             <p className="text-xs text-slate-400 mt-1">
                                 We sent a 6-digit code to <br />
                                 <strong className="text-indigo-400">{verificationEmail}</strong>
                             </p>
 
                             {/* 60s Live Countdown Timer */}
-                            <div className="mt-3 inline-flex items-center space-x-1.5 px-3 py-1 bg-slate-950 border border-slate-800 rounded-full text-xs">
+                            <div className="mt-3 inline-flex items-center space-x-1.5 px-3.5 py-1 bg-slate-50 border border-slate-200 rounded-full text-xs">
                                 <Clock className={`w-3.5 h-3.5 ${timeLeft > 10 ? 'text-indigo-400' : 'text-rose-400 animate-pulse'}`} />
                                 <span className={timeLeft > 10 ? 'text-slate-300' : 'text-rose-400 font-bold'}>
                                     {timeLeft > 0 ? `Code expires in 00:${timeLeft < 10 ? '0' : ''}${timeLeft}` : 'Code Expired'}
@@ -148,7 +148,7 @@ export default function Auth({ onLoginSuccess }) {
                         )}
 
                         {successMsg && (
-                            <div className="mb-4 p-3 bg-emerald-500/10 border border-emerald-500/30 rounded-xl text-emerald-400 text-xs text-center">
+                            <div className="mb-4 p-3 bg-emerald-500/10 border border-emerald-500/30 rounded-xl text-emerald-700 font-medium text-xs text-center">
                                 {successMsg}
                             </div>
                         )}
@@ -162,14 +162,14 @@ export default function Auth({ onLoginSuccess }) {
                                     placeholder="• • • • • •"
                                     value={otpCode}
                                     onChange={(e) => setOtpCode(e.target.value)}
-                                    className="w-full bg-slate-950 border border-slate-800 rounded-xl py-3 text-center text-2xl font-bold tracking-widest text-indigo-300 placeholder-slate-700 focus:outline-none focus:border-indigo-500"
+                                    className="w-full bg-slate-50 border border-slate-200 rounded-xl py-3 text-center text-2xl font-bold tracking-widest text-indigo-600 placeholder-slate-300 focus:outline-none focus:bg-white focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 transition shadow-2xs"
                                 />
                             </div>
 
                             <button
                                 type="submit"
                                 disabled={loading || otpCode.length !== 6 || timeLeft === 0}
-                                className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-medium py-3 rounded-xl transition flex items-center justify-center space-x-2 shadow-lg shadow-indigo-600/25 disabled:opacity-50"
+                                className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-3 rounded-xl transition flex items-center justify-center space-x-2 shadow-lg shadow-indigo-600/25 disabled:opacity-50"
                             >
                                 <span>{loading ? 'Verifying...' : timeLeft === 0 ? 'Code Expired' : 'Verify & Continue'}</span>
                                 <CheckCircle2 className="w-4 h-4" />
@@ -180,7 +180,7 @@ export default function Auth({ onLoginSuccess }) {
                             <button
                                 type="button"
                                 onClick={handleResendOTP}
-                                className="hover:text-indigo-400 flex items-center gap-1 transition text-indigo-400 font-medium"
+                                className="hover:text-indigo-600 font-medium flex items-center gap-1 transition text-indigo-400 font-medium"
                             >
                                 <RefreshCw className="w-3.5 h-3.5" />
                                 <span>Resend Code (60s)</span>
@@ -188,7 +188,7 @@ export default function Auth({ onLoginSuccess }) {
                             <button
                                 type="button"
                                 onClick={() => setAwaitingVerification(false)}
-                                className="hover:text-white transition"
+                                className="hover:text-slate-900 transition"
                             >
                                 Back to Sign In
                             </button>
@@ -210,75 +210,75 @@ export default function Auth({ onLoginSuccess }) {
                         <form onSubmit={handleSubmit} className="space-y-4">
                             {!isLogin && (
                                 <div>
-                                    <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
+                                    <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
                                         Full Name
                                     </label>
                                     <div className="relative">
-                                        <User className="w-5 h-5 text-slate-500 absolute left-3 top-3" />
+                                        <User className="w-5 h-5 text-slate-400 absolute left-3 top-3" />
                                         <input
                                             type="text"
                                             required
                                             placeholder="Muhammad Yasir"
                                             value={formData.name}
                                             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                                            className="w-full bg-slate-950 border border-slate-800 rounded-xl py-2.5 pl-10 pr-4 text-white placeholder-slate-600 focus:outline-none focus:border-indigo-500 transition text-sm"
+                                            className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2.5 pl-10 pr-4 text-slate-900 placeholder-slate-400 focus:outline-none focus:bg-white focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 transition text-sm shadow-2xs"
                                         />
                                     </div>
                                 </div>
                             )}
 
                             <div>
-                                <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
+                                <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
                                     Email Address
                                 </label>
                                 <div className="relative">
-                                    <Mail className="w-5 h-5 text-slate-500 absolute left-3 top-3" />
+                                    <Mail className="w-5 h-5 text-slate-400 absolute left-3 top-3" />
                                     <input
                                         type="email"
                                         required
                                         placeholder="name@example.com"
                                         value={formData.email}
                                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                                        className="w-full bg-slate-950 border border-slate-800 rounded-xl py-2.5 pl-10 pr-4 text-white placeholder-slate-600 focus:outline-none focus:border-indigo-500 transition text-sm"
+                                        className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2.5 pl-10 pr-4 text-slate-900 placeholder-slate-400 focus:outline-none focus:bg-white focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 transition text-sm shadow-2xs"
                                     />
                                 </div>
                             </div>
 
                             <div>
-                                <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
+                                <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
                                     Password
                                 </label>
                                 <div className="relative">
-                                    <Lock className="w-5 h-5 text-slate-500 absolute left-3 top-3" />
+                                    <Lock className="w-5 h-5 text-slate-400 absolute left-3 top-3" />
                                     <input
                                         type="password"
                                         required
                                         placeholder="Min. 8 chars (Aa1@)"
                                         value={formData.password}
                                         onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                                        className="w-full bg-slate-950 border border-slate-800 rounded-xl py-2.5 pl-10 pr-4 text-white placeholder-slate-600 focus:outline-none focus:border-indigo-500 transition text-sm"
+                                        className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2.5 pl-10 pr-4 text-slate-900 placeholder-slate-400 focus:outline-none focus:bg-white focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 transition text-sm shadow-2xs"
                                     />
                                 </div>
                             </div>
 
                             {/* Password Requirement Guidelines (Shown during Sign Up) */}
                             {!isLogin && formData.password.length > 0 && (
-                                <div className="p-3 bg-slate-950/70 border border-slate-800 rounded-xl space-y-1 text-[11px]">
+                                <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl space-y-1 text-[11px]">
                                     <p className="font-semibold text-slate-400 mb-1">Password Requirements:</p>
                                     <div className="grid grid-cols-2 gap-1">
-                                        <span className={passwordChecks.length ? 'text-emerald-400' : 'text-slate-500'}>
+                                        <span className={passwordChecks.length ? 'text-emerald-700 font-medium' : 'text-slate-400'}>
                                             {passwordChecks.length ? '✓' : '○'} 8+ Characters
                                         </span>
-                                        <span className={passwordChecks.upper ? 'text-emerald-400' : 'text-slate-500'}>
+                                        <span className={passwordChecks.upper ? 'text-emerald-700 font-medium' : 'text-slate-400'}>
                                             {passwordChecks.upper ? '✓' : '○'} Uppercase (A-Z)
                                         </span>
-                                        <span className={passwordChecks.lower ? 'text-emerald-400' : 'text-slate-500'}>
+                                        <span className={passwordChecks.lower ? 'text-emerald-700 font-medium' : 'text-slate-400'}>
                                             {passwordChecks.lower ? '✓' : '○'} Lowercase (a-z)
                                         </span>
-                                        <span className={passwordChecks.number ? 'text-emerald-400' : 'text-slate-500'}>
+                                        <span className={passwordChecks.number ? 'text-emerald-700 font-medium' : 'text-slate-400'}>
                                             {passwordChecks.number ? '✓' : '○'} Number (0-9)
                                         </span>
-                                        <span className={passwordChecks.special ? 'text-emerald-400' : 'text-slate-500'}>
+                                        <span className={passwordChecks.special ? 'text-emerald-700 font-medium' : 'text-slate-400'}>
                                             {passwordChecks.special ? '✓' : '○'} Special (@$!%*?&#)
                                         </span>
                                     </div>
@@ -288,7 +288,7 @@ export default function Auth({ onLoginSuccess }) {
                             <button
                                 type="submit"
                                 disabled={loading || (!isLogin && !isPasswordValid)}
-                                className="w-full mt-2 bg-indigo-600 hover:bg-indigo-500 text-white font-medium py-3 rounded-xl transition flex items-center justify-center space-x-2 shadow-lg shadow-indigo-600/25 disabled:opacity-50"
+                                className="w-full mt-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-3 rounded-xl transition flex items-center justify-center space-x-2 shadow-lg shadow-indigo-600/25 disabled:opacity-50"
                             >
                                 <span>{loading ? 'Please wait...' : isLogin ? 'Sign In' : 'Create & Verify Account'}</span>
                                 <ArrowRight className="w-4 h-4" />
@@ -302,7 +302,7 @@ export default function Auth({ onLoginSuccess }) {
                                     setIsLogin(!isLogin);
                                     setError('');
                                 }}
-                                className="text-sm text-slate-400 hover:text-indigo-400 transition"
+                                className="text-sm text-slate-400 hover:text-indigo-600 font-medium transition"
                             >
                                 {isLogin ? "Don't have an account? Sign up" : 'Already have an account? Sign in'}
                             </button>

@@ -13,16 +13,16 @@ import {
 import API from '../api';
 
 const priorityColors = {
-    Urgent: 'bg-rose-500/10 text-rose-400 border-rose-500/30',
-    High: 'bg-amber-500/10 text-amber-400 border-amber-500/30',
-    Medium: 'bg-indigo-500/10 text-indigo-400 border-indigo-500/30',
-    Low: 'bg-slate-500/10 text-slate-400 border-slate-500/30',
+    Urgent: 'bg-rose-50 text-rose-700 border-rose-200',
+    High: 'bg-amber-50 text-amber-800 border-amber-200',
+    Medium: 'bg-blue-50 text-blue-700 border-blue-200',
+    Low: 'bg-emerald-50 text-emerald-700 border-emerald-200',
 };
 
 const statusColors = {
-    pending: 'text-amber-400 border-amber-500/30 bg-amber-500/10',
-    'in-progress': 'text-blue-400 border-blue-500/30 bg-blue-500/10',
-    completed: 'text-emerald-400 border-emerald-500/30 bg-emerald-500/10',
+    pending: 'text-amber-800 border-amber-200 bg-amber-50',
+    'in-progress': 'text-blue-700 border-blue-200 bg-blue-50',
+    completed: 'text-emerald-800 border-emerald-200 bg-emerald-50',
 };
 
 export default function TaskCard({ task, onUpdateTask, onDeleteTask }) {
@@ -90,7 +90,7 @@ export default function TaskCard({ task, onUpdateTask, onDeleteTask }) {
     };
 
     return (
-        <div className="bg-slate-900 border border-slate-800 hover:border-slate-700/80 rounded-2xl p-5 shadow-lg transition flex flex-col justify-between group">
+        <div className="bg-white border border-slate-200/90 hover:border-slate-300 rounded-2xl p-5 shadow-xs hover:shadow-md transition-all duration-200 flex flex-col justify-between group">
 
             <div>
                 <div className="flex items-center justify-between gap-2 mb-3">
@@ -102,7 +102,7 @@ export default function TaskCard({ task, onUpdateTask, onDeleteTask }) {
                         <select
                             value={task.status}
                             onChange={(e) => handleStatusChange(e.target.value)}
-                            className={`text-xs font-medium px-2.5 py-1 rounded-full border bg-slate-950 cursor-pointer focus:outline-none ${statusColors[task.status] || statusColors.pending}`}
+                            className={`text-xs font-medium px-2.5 py-1 rounded-full border cursor-pointer focus:outline-none ${statusColors[task.status] || statusColors.pending}`}
                         >
                             <option value="pending">Pending</option>
                             <option value="in-progress">In Progress</option>
@@ -119,11 +119,11 @@ export default function TaskCard({ task, onUpdateTask, onDeleteTask }) {
                     </div>
                 </div>
 
-                <h3 className={`text-base font-semibold text-white mb-1.5 ${task.status === 'completed' ? 'line-through text-slate-400' : ''}`}>
+                <h3 className={`text-base font-semibold text-slate-900 mb-1.5 ${task.status === 'completed' ? 'line-through text-slate-600' : ''}`}>
                     {task.title}
                 </h3>
                 {task.description && (
-                    <p className="text-xs text-slate-400 line-clamp-2 mb-4 leading-relaxed">
+                    <p className="text-xs text-slate-600 line-clamp-2 mb-4 leading-relaxed">
                         {task.description}
                     </p>
                 )}
@@ -131,13 +131,13 @@ export default function TaskCard({ task, onUpdateTask, onDeleteTask }) {
                 {/* Subtask Progress Bar */}
                 {totalSubtasks > 0 && (
                     <div className="mb-4">
-                        <div className="flex items-center justify-between text-xs text-slate-400 mb-1">
+                        <div className="flex items-center justify-between text-xs text-slate-600 mb-1">
                             <span>Subtasks ({completedSubtasks}/{totalSubtasks})</span>
                             <span>{progressPercent}%</span>
                         </div>
-                        <div className="w-full bg-slate-800 rounded-full h-1.5 overflow-hidden">
+                        <div className="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
                             <div
-                                className="bg-indigo-500 h-1.5 rounded-full transition-all duration-300"
+                                className="bg-indigo-600 h-1.5 rounded-full transition-all duration-300"
                                 style={{ width: `${progressPercent}%` }}
                             />
                         </div>
@@ -150,13 +150,13 @@ export default function TaskCard({ task, onUpdateTask, onDeleteTask }) {
                         {task.subtasks.map((sub) => (
                             <label
                                 key={sub._id}
-                                className="flex items-start space-x-2 text-xs text-slate-300 hover:text-white cursor-pointer select-none bg-slate-950/60 border border-slate-800/80 p-2 rounded-lg"
+                                className="flex items-start space-x-2 text-xs text-slate-700 hover:text-slate-900 cursor-pointer select-none bg-slate-50/80 border border-slate-200/80 hover:bg-slate-100/70 p-2.5 rounded-xl transition"
                             >
                                 <input
                                     type="checkbox"
                                     checked={sub.completed}
                                     onChange={() => handleToggleSubtask(sub._id)}
-                                    className="rounded border-slate-700 bg-slate-900 text-indigo-600 focus:ring-0 mt-0.5"
+                                    className="rounded border-slate-300 bg-white text-indigo-600 focus:ring-0 mt-0.5"
                                 />
                                 <span className={sub.completed ? 'line-through text-slate-500' : ''}>
                                     {sub.title}
@@ -168,8 +168,8 @@ export default function TaskCard({ task, onUpdateTask, onDeleteTask }) {
 
                 {/* AI Output / Solution Box */}
                 {task.aiSolution && (
-                    <div className="mt-3 bg-emerald-950/20 border border-emerald-500/20 rounded-xl overflow-hidden">
-                        <div className="p-2.5 flex items-center justify-between text-xs font-medium text-emerald-300 bg-emerald-950/30">
+                    <div className="mt-3 bg-emerald-50/70 border border-emerald-200 rounded-xl overflow-hidden shadow-2xs">
+                        <div className="p-2.5 flex items-center justify-between text-xs font-semibold text-emerald-800 bg-emerald-100/60">
                             <div className="flex items-center space-x-1.5">
                                 <Zap className="w-3.5 h-3.5 text-emerald-400" />
                                 <span>AI Execution Result</span>
@@ -190,7 +190,7 @@ export default function TaskCard({ task, onUpdateTask, onDeleteTask }) {
                         </div>
 
                         {expandedSolution && (
-                            <div className="p-3 border-t border-emerald-500/20 text-xs text-slate-300 bg-slate-950/50 whitespace-pre-line leading-relaxed max-h-48 overflow-y-auto">
+                            <div className="p-3 border-t border-emerald-200 text-xs text-slate-700 bg-white whitespace-pre-line leading-relaxed max-h-48 overflow-y-auto">
                                 {task.aiSolution}
                             </div>
                         )}
@@ -199,10 +199,10 @@ export default function TaskCard({ task, onUpdateTask, onDeleteTask }) {
 
                 {/* AI Insights & Productivity Tips Panel */}
                 {(task.aiPriorityReason || task.aiProductivityTips?.length > 0) && (
-                    <div className="mt-3 bg-indigo-950/20 border border-indigo-500/20 rounded-xl overflow-hidden">
+                    <div className="mt-3 bg-indigo-50/70 border border-indigo-200 rounded-xl overflow-hidden shadow-2xs">
                         <button
                             onClick={() => setExpandedAI(!expandedAI)}
-                            className="w-full p-2.5 flex items-center justify-between text-xs font-medium text-indigo-300 hover:bg-indigo-500/10 transition"
+                            className="w-full p-2.5 flex items-center justify-between text-xs font-semibold text-indigo-900 hover:bg-indigo-100/50 transition"
                         >
                             <div className="flex items-center space-x-1.5">
                                 <Sparkles className="w-3.5 h-3.5 text-indigo-400" />
@@ -212,17 +212,17 @@ export default function TaskCard({ task, onUpdateTask, onDeleteTask }) {
                         </button>
 
                         {expandedAI && (
-                            <div className="p-3 border-t border-indigo-500/20 space-y-2.5 text-xs text-slate-300 bg-slate-950/40">
+                            <div className="p-3 border-t border-indigo-200 space-y-2.5 text-xs text-slate-700 bg-white">
                                 {task.aiPriorityReason && (
                                     <div>
-                                        <span className="font-semibold text-indigo-300">Priority Reason: </span>
-                                        <span className="text-slate-400">{task.aiPriorityReason}</span>
+                                        <span className="font-semibold text-indigo-900 font-semibold">Priority Reason: </span>
+                                        <span className="text-slate-600">{task.aiPriorityReason}</span>
                                     </div>
                                 )}
                                 {task.aiProductivityTips?.length > 0 && (
                                     <div>
-                                        <span className="font-semibold text-indigo-300 block mb-1">Productivity Tips:</span>
-                                        <ul className="space-y-1 list-disc list-inside text-slate-400">
+                                        <span className="font-semibold text-indigo-900 font-semibold block mb-1">Productivity Tips:</span>
+                                        <ul className="space-y-1 list-disc list-inside text-slate-600">
                                             {task.aiProductivityTips.map((tip, idx) => (
                                                 <li key={idx} className="leading-tight">{tip}</li>
                                             ))}
@@ -236,7 +236,7 @@ export default function TaskCard({ task, onUpdateTask, onDeleteTask }) {
             </div>
 
             {/* Card Footer: Due Date & Action Buttons */}
-            <div className="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-500">
+            <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
                 <div className="flex items-center space-x-1.5">
                     <Calendar className="w-3.5 h-3.5" />
                     <span>
@@ -248,7 +248,7 @@ export default function TaskCard({ task, onUpdateTask, onDeleteTask }) {
                     <button
                         onClick={handleTriggerAI}
                         disabled={analyzing}
-                        className="flex items-center space-x-1 text-indigo-400 hover:text-indigo-300 transition font-medium disabled:opacity-50"
+                        className="flex items-center space-x-1 text-indigo-400 hover:text-indigo-900 font-semibold transition font-medium disabled:opacity-50"
                     >
                         <Sparkles className={`w-3.5 h-3.5 ${analyzing ? 'animate-spin' : ''}`} />
                         <span>{analyzing ? 'Thinking...' : 'AI Tips'}</span>
@@ -257,7 +257,7 @@ export default function TaskCard({ task, onUpdateTask, onDeleteTask }) {
                     <button
                         onClick={handleSolveTask}
                         disabled={solving}
-                        className="flex items-center space-x-1 text-emerald-400 hover:text-emerald-300 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 px-2.5 py-1 rounded-lg transition font-medium disabled:opacity-50"
+                        className="flex items-center space-x-1 text-emerald-800 hover:text-emerald-950 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 px-2.5 py-1 rounded-lg transition font-semibold shadow-2xs disabled:opacity-50"
                     >
                         <Zap className={`w-3.5 h-3.5 ${solving ? 'animate-spin' : ''}`} />
                         <span>{solving ? 'Executing...' : '⚡ Solve'}</span>
